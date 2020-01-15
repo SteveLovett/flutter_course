@@ -4,9 +4,17 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  var questionIndex = 0;  //classwide variables are known as properties
-  
+class MyApp extends StatefulWidget {
+
+  @override
+  State<StatefulWidget> createState() {
+    return MyAppState();
+  }
+}
+
+class MyAppState extends State <MyApp>{
+  var questionIndex = 0; //classwide variables are known as properties
+
   void answerQuestion() {
     questionIndex = questionIndex + 1;
     print(questionIndex);
