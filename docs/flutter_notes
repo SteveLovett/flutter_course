@@ -1,0 +1,158 @@
+Flutter Notes:
+
+Widgets are just a special type of class
+
+Inheritance - uses the extends keyword - the class inherits all of the features of the base class and then adds new features to them.
+
+Variables inside of classes are called properties and functions inside classes are called methods.
+
+build is the method that describes the part of the UI represented by the widget - whatever that means. I think it sets the widgets place in the widget tree. It is of type Widget and it returns a MaterialApp function which is then placed in the widget tree.
+
+BuildContext is a class that is required to render widgets on the screen and is called by flutter when you run your program.  It is a handle to the widget’s location in the widget tree.
+
+The MaterialApp function handles most of the heavy lifting of the application.  It requires the named argument home: as this is the default route of the app.
+
+We must add the runApp function to the main class.  The runApp function is called when you run your app and draws something on the tree based on what is in the widget tree. The function requires that you pass in a concrete object and not a typed object.  This basically means that we have to pass in the name of our app (i.e. MyApp()) with parentheses because you instantiate an object based on a class using parentheses.
+
+Constructors always execute only once when we create a new object based on the class.  You can add a constructor by repeating the name of the class instantiated as an object with curly braces to contain the declarations.
+
+Example:
+
+class Person {
+	String name;
+	int age;
+
+	Person(String inputName, int inputAge) {
+	}
+}
+
+Due to “Scoping” dart can handle variables with the same name that are declared in a function and as arguments to the function.  Scoping allows dart to handle this behind the scenes and will not clash between these variable declarations.  In other words there is no clashing between class and constructor level variable declarations.  This is not pictured above, but would be if inputName and inputAge were changed to name and age respectively.
+
+Using the “this” keyword, we can specifically reference class level variables - so this.name would refer to the String name; declaration above even if inputName were changed to “name”.
+
+You can also wrap the constructors in curly braces to make them named arguments.  Now these arguments are all optional and do not need to have value set to them.
+
+Example:
+
+	Person({String inputName, int inputAge})
+
+Without this format the constructor order must be maintained.  In other words the first value passed in would apply to inputName and the second to inputAge.  This way, we can refer to the named argument when calling the function to assign value specific to one variable and/or the others in any order we want. This is much better when there are a lot of constructors as it is impractical to remember the order of 10+ constructors.
+
+Since named arguments are not required, it is good practice to set a default value when setting the named arguments.
+
+Ex.
+	Person({String inputName = ‘Steve’, int inputAge = 31})
+
+This is good if the user does not enter a value for one of the arguments.
+
+Another option is to add the @required annotation next to the named argument to require the user to enter a value. This is a flutter feature and not a dart command.
+
+Ex.
+	Person({@required String inputName, @required int inputAge})
+
+Optionally, you can remove the body of the constructor function and end the line with a semicolon if you are simply assigning class variables to the named arguments. The benefit is that this is shorter syntax.
+
+Ex.
+
+class Person {
+	String name;
+	int age;
+
+	Person({this.name, this.age});
+}
+
+Every app needs to extend either StatelessWidget or StatefulWidget. Every widget is simply a dart class that is attached to a build method.
+
+@override should be included above the build method.  It is a decorator that makes the code clearer and cleaner.  We are indicating that we are overriding the build method with our own implementation and even though the StatelessWidget requires that the build method be overwritten, it is best practice to explicitly state it in the code to clarify where in the code the build method has been overwritten.
+
+There is also the the shortened function notation when there is one and only one expression.
+
+Ex.
+
+void main() => runApp(MyApp());
+
+There are 2 different kinds of widgets, those that control the output and input (visible) and those that add control and layout features (invisible).  The Container() widget is special in that it fits into both categories since it is invisible by default but can be given a border and other styling to make it visible.
+
+For text that uses an apostrophe, the backslash \ may be used to cancel the effect in a text string so that it does not end the string prematurely.
+
+Ex.
+
+	Text(‘What\’s your favorite color?’)
+
+Dart uses type inference to assume the type of a variable based on the input, however, in some cases the type cannot be inferred based on the input and (should?) (must?) therefore be explicitly declared.
+
+null represents a blank value in dart.
+
+onPressed requires a function that returns void as an input, but we cannot instantiate the function that we pass in because then the function would be run when the button is generated and not when the user presses the button. To do this, we must pass in a pointer to the function by removing the parentheses.
+
+Ex.
+	
+	bad: onPressed: answerQueston(),
+	good: onPressed: answerQuestion,
+
+Instead of passing in a named function, we can pass an anonymous function to onPressed.  This is useful as it is faster and cleaner to write, but is only useful if the code will not be used anywhere else.
+
+Ex.
+
+	onPressed: () => print(‘Answer 2 chosen!’),
+OR
+
+	onPressed: () {
+		// …
+		print(‘Answer 3 chosen!’);
+	},
+
+Notes on State:
+
+State is data or information used by your app.  App-wide state could be things like user authentication.  Widget state shows current user input or mutable data that is displayed to the user on the widget.
+
+The core difference between stateless and stateful widgets is that a stateless widget will only rerender the UI when external data (i.e. user input) changes.  Stateful widgets will rerender both when external data changes and when the widget state, or data within our widget changes.
+
+The StatefulWidget requires both the class and a separate class defining the state of the widget using the app name followed by State as a naming convention.
+
+Ex.
+
+class MyApp extends StatefulWidget {}
+
+class MyAppState extends State {}
+
+The State class is not recreated like the StatefulWidget class when external data changes.  The State class persists data or maintains the state of the data.  With stateless classes, the class can be rebuilt when external data changes because there is no state to maintain.  For example a Text class would still return the same line of text after being rebuilt, whereas a stateful class would need to persist the state through rebuild or multi-part operations would constantly return to the initial state of the widget when rebuilt.
+
+setState() calls the build method on the widget where you call setState which will rerender the widget.  Flutter does not rerender the entire UI every time the build method is called, that would be grossly inefficient, instead it has built-in mechanisms to determine exactly what changed and just rerender the areas that had changes.
+
+
+Useful Key Bindings:
+Mac:
+
+Cmd + Shift + . > show hidden files in folders
+
+Visual Studio:
+
+Shift + Option + F  > Reformats code
+Shift + Option + Up/Down Arrow > Duplicates current line on the line above or below
+Ctrl + Shift + R > Refactor - hover over the code to refactor and use this key binding (useful for refactor from stateless to stateful quickly)
+
+
+Widget Notes:
+
+StatelessWidget - The basic default widget that your app must extend in order to run.  This widget does not require a mutable state, for this you would use Stateful Widget.  This widget describes the UI by creating a constellation of other widgets that describe the UI more completely - basic outline for the app.
+
+Stateful Widget - Like the StatelessWidget but has a mutable state or has data that can be read synchronously when the widget is built and has data that may change during the lifetime of the widget.  Tracking the state is the responsibility of the widget implementer using State.setState.  In other words, this is used if the widget uses data that may be changed during its lifetime.
+
+BuildContext - A handle to the location of a widget in the widget tree.
+
+Widget - An immutable description of part of the UI in an application.  The basic building blocks for an application.
+
+MaterialApp - A wrapper for a number of other commonly used widgets that are required for material design apps.  It provides material-design specific functionality and controls navigation routes by configuring the top-level Navigator.
+
+Scaffold - Provides a basic design including structure and color for material design apps.
+
+AppBar - A toolbar and potentially other widgets.
+
+Container - A widget that combines various style and painting features.  It is both a visible and an invisible widget as it is invisible by default but becomes visible after various styles and effects are applied to it.
+
+Column - A widget that takes a list of Widgets as an argument to “children:” and renders them on the screen vertically.
+
+Row - See Column but rendered horizontally.
+
+Raised Button - A widget that renders a button on the screen with varying stylistic effect.  The function requires the onPressed: named argument to define what will happen when the user presses the button.
