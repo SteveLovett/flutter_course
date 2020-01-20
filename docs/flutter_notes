@@ -102,6 +102,12 @@ OR
 		print(‘Answer 3 chosen!’);
 	},
 
+Functions and methods can be restricted so that other files and classes cannot alter them.  This doesn't matter as much for us as developers because we can just choose not to use them.
+But when working on teams or with other developers it is useful to limit the usage of certain features so that they are not used in the wrong ways causing sync issues and bugs.
+To turn a public class into a private class, you simply add an underscore before the class name and make sure to update the class name in every place it is used to include the underscore. This changes the class from a public class into a private class.
+
+
+
 Notes on State:
 
 State is data or information used by your app.  App-wide state could be things like user authentication.  Widget state shows current user input or mutable data that is displayed to the user on the widget.
