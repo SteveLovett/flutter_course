@@ -109,7 +109,7 @@ To turn a public class into a private class, you simply add an underscore before
 A good convention is to only have one widget per file. - it seems this means only one widget we create per file, not specific widgets like MaterialApp, Scaffold, etc.
 An exception to this rule would be if two widgets work together and one or both are not intended to be used again outside of that file.
 
-We use the @final decorator to indicate that a variable will not change outside of its initial implementation within the constructor function. There may be other uses but this is one place where @final should be used.
+We use final to indicate that a variable will not change outside of its initial implementation within the constructor function. There may be other uses but this is one place where final should be used.
 
 Notes on State:
 
